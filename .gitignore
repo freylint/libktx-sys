@@ -1,0 +1,7 @@
+# IDE Configurations
+**/.vscode/
+**/.vs/
+**/.idea/
+
+# Build Artifacts
+**/target/
