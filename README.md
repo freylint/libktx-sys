@@ -14,7 +14,7 @@ This crate inherits the dependencies of the libktx library.
 You will need to have the following installed alongsige the standard Rust toolchain:
 
 - CMake
-- LLVM
+- LLVM (With the `LIBCLANG_PATH` environment variable set)
 - Vulkan SDK (With the `VULKAN_SDK` environment variable set)
 
 ## Planned Features
