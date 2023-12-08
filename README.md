@@ -22,3 +22,4 @@ You will need to have the following installed alongsige the standard Rust toolch
 - Seperate vulkan and opengl bindings through features
 - Stop compiling unused libktx components
 - Add proper Build testing for all platforms
+- Only expose nessecary parts of the vulkan API
