@@ -45,12 +45,12 @@ fn build_ktx(
     build_type: &'_ str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let srcs: PathBuf = srcs.into();
+
     let dest = Config::new(srcs.as_path())
         .define("KTX_FEATURE_STATIC_LIBRARY", "ON")
         .define("CMAKE_BUILD_TYPE", build_type)
         .define("CMAKE_CXX_STANDARD", "17")
-        // TODO make cross platform
-        .define("CMAKE_CXX_FLAGS", "/EHsc /WX- /wd4996")
+        .define("CMAKE_CXX_FLAGS", get_flags())
         .build();
 
     // Tell cargo to tell rustc to link the system library
@@ -58,4 +58,17 @@ fn build_ktx(
     println!("cargo:rustc-link-lib=static=ktx");
 
     Ok(())
+}
+// TODO support non-msvc compilers on windows
+fn get_flags() -> &'static str {
+    if cfg!(target_os = "windows") {
+        if std::env::var("TARGET").unwrap().contains("msvc") {
+            "/EHsc /WX- /wd4996"
+        } else {
+            ""
+        }
+    } else {
+        // Other OS
+        "-Wno-error -Wno-error=deprecated-declarations -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-value -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-result -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error="
+    }
 }
