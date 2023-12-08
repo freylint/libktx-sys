@@ -5,3 +5,4 @@
 
 # Build Artifacts
 **/target/
+src/ffi.rs
