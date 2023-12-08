@@ -5,6 +5,9 @@ authors = ["Lucas Priestley <lmpriestley@outlook.com>"]
 edition = "2021"
 description = "Rust bindings for libktx"
 license = "MIT"
+homepage = "https://github.com/freylint/libktx-sys"
+repository = "https://github.com/freylint/libktx-sys"
+readme = "readme.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
