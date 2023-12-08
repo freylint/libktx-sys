@@ -1,6 +1,6 @@
 [package]
 name = "libktx-sys"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Lucas Priestley <lmpriestley@outlook.com>"]
 edition = "2021"
 description = "Rust bindings for libktx"
