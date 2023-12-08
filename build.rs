@@ -2,13 +2,10 @@ use std::env;
 use std::path::{Path, PathBuf};
 
 use cmake::Config;
-use git2::build::RepoBuilder;
 
 fn main() {
     // Git repo information
-    let tag = "v4.2.1";
-    let mut src_dest = env::var("OUT_DIR").unwrap();
-    src_dest.push_str("/KTX-Software");
+    let srcs = Path::new("vendor/KTX-Software");
 
     // Build config
     #[cfg(debug_assertions)]
@@ -21,7 +18,7 @@ fn main() {
     let vulkan_include_path = Path::new(&vulkan_sdk_path).join("include");
 
     // Build dependencies
-    build_ktx(&src_dest, build_type).expect("Failed to build KTX-Software");
+    build_ktx(srcs, build_type).expect("Failed to build KTX-Software");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -31,7 +28,7 @@ fn main() {
         // bindings for.
         .header("wrapper.h")
         .clang_args([
-            format!("-I{}/include", src_dest),
+            format!("-I{}/include", srcs.display()),
             format!("-I{}", vulkan_include_path.display()),
         ])
         .generate()
