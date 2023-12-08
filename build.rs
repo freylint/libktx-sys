@@ -20,11 +20,6 @@ fn main() {
     let vulkan_sdk_path = std::env::var("VULKAN_SDK").expect("VULKAN_SDK not found");
     let vulkan_include_path = Path::new(&vulkan_sdk_path).join("include");
 
-    // Clone sources if nessecary
-    if !Path::new(&src_dest).exists() {
-        clone_repo(&src_dest, tag).expect("Failed to clone KTX-Software repository");
-    }
-
     // Build dependencies
     build_ktx(&src_dest, build_type).expect("Failed to build KTX-Software");
 
@@ -48,27 +43,6 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
-}
-
-fn clone_repo(dest: impl Into<PathBuf>, tag: &str) -> Result<(), git2::Error> {
-    // Clone repo
-    let repo = RepoBuilder::new()
-        .clone(
-            "https://github.com/KhronosGroup/KTX-Software.git",
-            &dest.into(),
-        )
-        .expect("Failed to clone KTX-Software repository");
-
-    // Change to the upstream version
-    // TODO print the tag
-    let obj = repo.revparse_single(tag).expect("Can't parse tag");
-
-    repo.checkout_tree(&obj, None)
-        .expect("Failed to checkout tag");
-    repo.set_head_detached(obj.id())
-        .expect("Failed to set HEAD to tag");
-
-    Ok(())
 }
 
 fn build_ktx(
