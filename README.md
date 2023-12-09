@@ -23,3 +23,13 @@ You will need to have the following installed alongsige the standard Rust toolch
 - Stop compiling unused libktx components
 - Add proper Build testing for all platforms
 - Only expose nessecary parts of the vulkan API
+- Fix issues with generated documentation
+- Work around need to have the vulkan SDK and LibClang installed
+- Avoid regenergating bindings on every build
+
+## Crates.io Stewardship Notice
+
+I am aware of the libktx-rs and libktx-rs-sys crates on crate.io.
+The source code for this library has been archived, and I am considering it
+abandoned. I'll be maintaining this as a sys crate alone, with the burden of
+maintaining the higher level bindings left to the community.
