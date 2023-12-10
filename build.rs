@@ -2,10 +2,9 @@ use std::path::{Path, PathBuf};
 
 use cmake::Config;
 
-fn main() {
-    // Git repo information
-    let srcs = Path::new("vendor/KTX-Software");
+const SOURCE_DIR: &str = "vendor/KTX-Software";
 
+fn main() {
     // Build config
     #[cfg(debug_assertions)]
     let build_type = "Debug";
@@ -17,7 +16,7 @@ fn main() {
     let vulkan_include_path = Path::new(&vulkan_sdk_path).join("include");
 
     // Build dependencies
-    build_ktx(srcs, build_type).expect("Failed to build KTX-Software");
+    build_ktx(SOURCE_DIR, build_type).expect("Failed to build KTX-Software");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -27,7 +26,8 @@ fn main() {
         // bindings for.
         .header("wrapper.h")
         .clang_args([
-            format!("-I{}/include", srcs.display()),
+            format!("-I{}/include", SOURCE_DIR),
+            format!("-I{}/lib", SOURCE_DIR),
             format!("-I{}", vulkan_include_path.display()),
         ])
         .generate()
