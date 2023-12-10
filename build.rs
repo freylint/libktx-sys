@@ -50,6 +50,8 @@ fn build_ktx(
         .define("CMAKE_BUILD_TYPE", build_type)
         .define("CMAKE_CXX_STANDARD", "17")
         .define("CMAKE_CXX_FLAGS", get_flags())
+        // TODO Re-enable this feature when patent expires.
+        .define("SUPPORT_SOFTWARE_ETC_UNPACK", "OFF")
         .build();
 
     // Tell cargo to tell rustc to link the system library
