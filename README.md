@@ -26,7 +26,7 @@ You will need to have the following installed alongsige the standard Rust toolch
 - Fix issues with generated documentation
 - Work around need to have the vulkan SDK and LibClang installed
 - Avoid regenergating bindings on every build
-- Build Prprocressor to clean up generated bindings. (Breaking and 1.0 release)
+- Build Postprocressor to clean up generated bindings. (Breaking and 1.0 release)
 
 ## Crates.io Stewardship Notice
 
