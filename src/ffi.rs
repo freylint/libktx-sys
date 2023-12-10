@@ -80,7 +80,8 @@ where
         }
     }
 }
-pub const VULKAN_H_: u32 = 1;
+pub const VULKAN_CORE_H_: u32 = 1;
+pub const VK_VERSION_1_0: u32 = 1;
 pub const _VCRT_COMPILER_PREPROCESSOR: u32 = 1;
 pub const _SAL_VERSION: u32 = 20;
 pub const __SAL_H_VERSION: u32 = 180000000;
@@ -97,8 +98,6 @@ pub const WCHAR_MIN: u32 = 0;
 pub const WCHAR_MAX: u32 = 65535;
 pub const WINT_MIN: u32 = 0;
 pub const WINT_MAX: u32 = 65535;
-pub const VULKAN_CORE_H_: u32 = 1;
-pub const VK_VERSION_1_0: u32 = 1;
 pub const VK_USE_64_BIT_PTR_DEFINES: u32 = 1;
 pub const VK_HEADER_VERSION: u32 = 268;
 pub const VK_ATTACHMENT_UNUSED: i32 = -1;
