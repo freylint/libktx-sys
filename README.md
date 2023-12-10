@@ -3,8 +3,8 @@
 This crate provides Rust bindings for the [libktx](https://github.khronos.org/KTX-Software/libktx/index.html) library.
 
 This crate is currently in very early development and is not yet ready
-for production use.
-
+for production use. Each release tracks the latest stable release of libktx at
+the time of implementation. This may be ameliorated in the future.
 See [Planned Features](#planned-features) for a list of features required before
 I will consider this crate ready for production use.
 
