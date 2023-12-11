@@ -23,6 +23,7 @@ fn main() {
     build_ktx(SOURCE_DIR, build_type).expect("Failed to build KTX-Software");
 
     // Generate bindings
+    #[cfg(feature = "bindgen")]
     gen_bindings()
         .write_to_file("src/ffi.rs")
         .expect("Couldn't write bindings!");
