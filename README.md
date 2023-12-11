@@ -17,6 +17,10 @@ You will need to have the following installed alongsige the standard Rust toolch
 - LLVM (With the `LIBCLANG_PATH` environment variable set)
 - Vulkan SDK (With the `VULKAN_SDK` environment variable set)
 
+Note: If you wish to change the targetted library verion or regenerate the bindings,
+re-enable the `bindgen` feature in the `Cargo.toml` file. This will regenerate the
+bindings.
+
 ## Planned Features
 
 - Seperate vulkan and opengl bindings through features
