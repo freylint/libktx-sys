@@ -140,6 +140,7 @@ dependencies = [
  "bindgen",
  "clang-sys",
  "cmake",
+ "regex",
 ]
 
 [[package]]
