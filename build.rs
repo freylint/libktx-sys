@@ -20,7 +20,8 @@ fn main() {
     let build_type = "Release";
 
     // Build dependencies
-    build_ktx(SOURCE_DIR, build_type).expect("Failed to build KTX-Software");
+    let out = build_ktx(SOURCE_DIR, build_type);
+    link_ktx(out);
 
     // Generate bindings
     #[cfg(feature = "bindgen")]
@@ -29,33 +30,15 @@ fn main() {
         .expect("Couldn't write bindings!");
 }
 
-fn build_ktx(
-    srcs: impl Into<PathBuf>,
-    build_type: &'_ str,
-) -> Result<(), Box<dyn std::error::Error>> {
-    let srcs: PathBuf = srcs.into();
-
-    let dest = build_ktx_cmake(&srcs, build_type)?;
-
-    link_ktx(dest);
-
-    Ok(())
-}
-
-fn build_ktx_cmake(
-    srcs: impl AsRef<Path>,
-    build_type: &'_ str,
-) -> Result<PathBuf, Box<dyn std::error::Error>> {
-    let dest = Config::new(srcs.as_ref())
+fn build_ktx(srcs: impl AsRef<Path>, build_type: &'_ str) -> PathBuf {
+    Config::new(srcs.as_ref())
         .define("KTX_FEATURE_STATIC_LIBRARY", "ON")
         .define("CMAKE_BUILD_TYPE", build_type)
         .define("CMAKE_CXX_STANDARD", "17")
         .define("CMAKE_CXX_FLAGS", get_flags())
         // TODO Re-enable this feature when patent expires.
         .define("SUPPORT_SOFTWARE_ETC_UNPACK", "OFF")
-        .build();
-
-    Ok(dest)
+        .build()
 }
 
 fn link_ktx(dest: impl AsRef<Path>) {
