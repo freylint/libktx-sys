@@ -1,10 +1,15 @@
-use std::path::{Path, PathBuf};
+use std::{
+    env,
+    path::{Path, PathBuf},
+};
 
 use bindgen::Bindings;
 use cmake::Config;
 
 const SOURCE_DIR: &str = "vendor/KTX-Software";
-const VK_INC_DIR: &str = &std::env::var("VULKAN_SDK").expect("VULKAN_SDK not found");
+fn get_vk_inc_dir() -> String {
+    env::var("VULKAN_SDK").expect("VULKAN_SDK not found")
+}
 
 fn main() {
     // Build config
@@ -46,7 +51,7 @@ fn build_ktx(
 }
 
 fn gen_bindings() -> Bindings {
-    let vulkan_include_path = Path::new(VK_INC_DIR).join("include");
+    let vulkan_include_path = Path::new(&get_vk_inc_dir()).join("include");
 
     bindgen::Builder::default()
         // The input header we would like to generate
@@ -65,7 +70,7 @@ fn gen_bindings() -> Bindings {
 // TODO support non-msvc compilers on windows
 fn get_flags() -> &'static str {
     if cfg!(target_os = "windows") {
-        if std::env::var("TARGET").unwrap().contains("msvc") {
+        if env::var("TARGET").unwrap().contains("msvc") {
             "/EHsc /WX- /wd4996"
         } else {
             ""
