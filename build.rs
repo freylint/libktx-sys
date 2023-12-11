@@ -1,8 +1,10 @@
 use std::path::{Path, PathBuf};
 
+use bindgen::Bindings;
 use cmake::Config;
 
 const SOURCE_DIR: &str = "vendor/KTX-Software";
+const VK_INC_DIR: &str = &std::env::var("VULKAN_SDK").expect("VULKAN_SDK not found");
 
 fn main() {
     // Build config
@@ -12,31 +14,8 @@ fn main() {
     #[cfg(not(debug_assertions))]
     let build_type = "Release";
 
-    let vulkan_sdk_path = std::env::var("VULKAN_SDK").expect("VULKAN_SDK not found");
-    let vulkan_include_path = Path::new(&vulkan_sdk_path).join("include");
-
     // Build dependencies
     build_ktx(SOURCE_DIR, build_type).expect("Failed to build KTX-Software");
-
-    // The bindgen::Builder is the main entry point
-    // to bindgen, and lets you build up options for
-    // the resulting bindings.
-    let bindings = bindgen::Builder::default()
-        // The input header we would like to generate
-        // bindings for.
-        .header("wrapper.h")
-        .clang_args([
-            format!("-I{}/include", SOURCE_DIR),
-            format!("-I{}/lib", SOURCE_DIR),
-            format!("-I{}", vulkan_include_path.display()),
-        ])
-        .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate bindings");
-
-    bindings
-        .write_to_file("src/ffi.rs")
-        .expect("Couldn't write bindings!");
 }
 
 fn build_ktx(
@@ -58,8 +37,30 @@ fn build_ktx(
     println!("cargo:rustc-link-search=native={}/lib", dest.display());
     println!("cargo:rustc-link-lib=static=ktx");
 
+    gen_bindings()
+        .write_to_file("src/ffi.rs")
+        .expect("Couldn't write bindings!");
+
     Ok(())
 }
+
+fn gen_bindings() -> Bindings {
+    let vulkan_include_path = Path::new(VK_INC_DIR).join("include");
+
+    bindgen::Builder::default()
+        // The input header we would like to generate
+        // bindings for.
+        .header("wrapper.h")
+        .clang_args([
+            format!("-I{}/include", SOURCE_DIR),
+            format!("-I{}/lib", SOURCE_DIR),
+            format!("-I{}", vulkan_include_path.display()),
+        ])
+        .generate()
+        // Unwrap the Result and panic on failure.
+        .expect("Unable to generate bindings")
+}
+
 // TODO support non-msvc compilers on windows
 fn get_flags() -> &'static str {
     if cfg!(target_os = "windows") {
