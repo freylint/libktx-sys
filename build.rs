@@ -35,7 +35,18 @@ fn build_ktx(
 ) -> Result<(), Box<dyn std::error::Error>> {
     let srcs: PathBuf = srcs.into();
 
-    let dest = Config::new(srcs.as_path())
+    let dest = build_ktx_cmake(&srcs, build_type)?;
+
+    link_ktx(dest);
+
+    Ok(())
+}
+
+fn build_ktx_cmake(
+    srcs: impl AsRef<Path>,
+    build_type: &'_ str,
+) -> Result<PathBuf, Box<dyn std::error::Error>> {
+    let dest = Config::new(srcs.as_ref())
         .define("KTX_FEATURE_STATIC_LIBRARY", "ON")
         .define("CMAKE_BUILD_TYPE", build_type)
         .define("CMAKE_CXX_STANDARD", "17")
@@ -44,28 +55,37 @@ fn build_ktx(
         .define("SUPPORT_SOFTWARE_ETC_UNPACK", "OFF")
         .build();
 
-    // Tell cargo to tell rustc to link the system library
-    println!("cargo:rustc-link-search=native={}/lib", dest.display());
-    println!("cargo:rustc-link-lib=static=ktx");
+    Ok(dest)
+}
 
-    Ok(())
+fn link_ktx(dest: impl AsRef<Path>) {
+    // Tell cargo to tell rustc to link the system library
+    println!(
+        "cargo:rustc-link-search=native={}/lib",
+        dest.as_ref().display()
+    );
+    println!("cargo:rustc-link-lib=static=ktx");
 }
 
 fn gen_bindings() -> Bindings {
-    let vulkan_include_path = Path::new(&get_vk_inc_dir()).join("include");
-
     bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
-        .clang_args([
-            format!("-I{}/include", SOURCE_DIR),
-            format!("-I{}/lib", SOURCE_DIR),
-            format!("-I{}", vulkan_include_path.display()),
-        ])
+        .clang_args(get_clang_args())
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings")
+}
+
+fn get_clang_args() -> Vec<String> {
+    let vulkan_include_path = Path::new(&get_vk_inc_dir()).join("include");
+    [
+        format!("-I{}/include", SOURCE_DIR),
+        format!("-I{}/lib", SOURCE_DIR),
+        format!("-I{}", vulkan_include_path.display()),
+    ]
+    .to_vec()
 }
 
 // TODO support non-msvc compilers on windows
@@ -78,6 +98,6 @@ fn get_flags() -> &'static str {
         }
     } else {
         // Other OS
-        "-Wno-error -Wno-error=deprecated-declarations -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-value -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-result -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error="
+        "-Wno-error -Wno-error=deprecated-declarations -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-value -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-result -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error=unused-function -Wno-error=unused-label -Wno-error=unused-local-typedefs -Wno-error=unused-macros -Wno-error=unused-parameter -Wno-error=unused-result -Wno-error=unused-value -Wno-error=unused-variable -Wno-error=unused-but-set-parameter -Wno-error=unused-but-set-variable -Wno-error="
     }
 }
