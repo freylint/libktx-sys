@@ -16,6 +16,11 @@ fn main() {
 
     // Build dependencies
     build_ktx(SOURCE_DIR, build_type).expect("Failed to build KTX-Software");
+
+    // Generate bindings
+    gen_bindings()
+        .write_to_file("src/ffi.rs")
+        .expect("Couldn't write bindings!");
 }
 
 fn build_ktx(
@@ -36,10 +41,6 @@ fn build_ktx(
     // Tell cargo to tell rustc to link the system library
     println!("cargo:rustc-link-search=native={}/lib", dest.display());
     println!("cargo:rustc-link-lib=static=ktx");
-
-    gen_bindings()
-        .write_to_file("src/ffi.rs")
-        .expect("Couldn't write bindings!");
 
     Ok(())
 }
