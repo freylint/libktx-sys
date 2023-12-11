@@ -29,7 +29,8 @@ bindings.
 - Only expose nessecary parts of the vulkan API
 - Fix issues with generated documentation
 - Work around need to have the vulkan SDK and LibClang installed
-- Avoid regenergating bindings on every build
+- Avoid regenergating bindings on every build~ (Done)
+- Get generated tests working
 - Build Postprocressor to clean up generated bindings. (Breaking and 1.0 release)
 
 ## Crates.io Stewardship Notice
