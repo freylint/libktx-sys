@@ -17,7 +17,6 @@ fn main() {
     // Build config
     #[cfg(debug_assertions)]
     let build_type = "Debug";
-
     #[cfg(not(debug_assertions))]
     let build_type = "Release";
 
@@ -76,6 +75,7 @@ fn get_clang_args() -> Vec<String> {
 }
 
 // TODO support non-msvc compilers on windows
+// TODO Pull the flags from the cmake build
 fn get_flags() -> &'static str {
     if cfg!(target_os = "windows") {
         if env::var("TARGET").unwrap().contains("msvc") {
