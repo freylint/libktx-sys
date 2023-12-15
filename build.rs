@@ -35,6 +35,9 @@ fn main() {
 fn build_ktx(srcs: impl AsRef<Path>, build_type: &'_ str) -> PathBuf {
     Config::new(srcs.as_ref())
         .define("KTX_FEATURE_STATIC_LIBRARY", "ON")
+        .define("KTX_FEATURE_TOOLS", "OFF")
+        .define("KTX_FEATURE_LOADTEST", "OFF")
+        .define("KTX_FEATURE_TESTS", "OFF")
         .define("CMAKE_BUILD_TYPE", build_type)
         .define("CMAKE_CXX_STANDARD", "17")
         .define("CMAKE_CXX_FLAGS", get_flags())
