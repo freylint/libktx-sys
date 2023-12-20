@@ -7,10 +7,10 @@ description = "Rust bindings for libktx"
 license = "MIT"
 homepage = "https://github.com/freylint/libktx-sys"
 repository = "https://github.com/freylint/libktx-sys"
-readme = "readme.md"
+readme = "README.md"
 keywords = ["gamedev", "graphics"]
 categories = ["game-development", "graphics", "encoding", "multimedia"]
-include = ["src/**/*", "wrapper.h", "vendored/**/*"]
+include = ["src/**/*", "wrapper.h", "vendored/**/*", "README.md"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
