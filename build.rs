@@ -31,6 +31,12 @@ fn main() {
         .expect("Couldn't write bindings!");
 }
 
+fn configure_cargo() {
+    // Tell cargo to invalidate the built crate whenever the wrapper changes
+    println!("cargo:rerun-if-changed=wrapper.h");
+    println!("cargo:rerun-if-changed=build.rs");
+}
+
 fn build_ktx(srcs: impl AsRef<Path>, build_type: &'_ str) -> PathBuf {
     Config::new(srcs.as_ref())
         .define("KTX_FEATURE_STATIC_LIBRARY", "ON")
