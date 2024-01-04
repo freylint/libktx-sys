@@ -5,7 +5,7 @@ This crate provides Rust bindings for the [libktx](https://github.khronos.org/KT
 This crate is currently in very early development and is not yet ready
 for production use. Each release tracks the latest stable release of libktx at
 the time of implementation. This may be ameliorated in the future.
-See [Planned Features](#planned-features) for a list of features required before
+See [Downstream Features](#downstream-features) for a list of features required before
 I will consider this crate ready for production use.
 
 ## Building
@@ -17,11 +17,15 @@ You will need to have the following installed alongsige the standard Rust toolch
 - LLVM (With the `LIBCLANG_PATH` environment variable set)
 - Vulkan SDK (With the `VULKAN_SDK` environment variable set)
 
-Note: If you wish to change the targetted library verion or regenerate the bindings,
-re-enable the `bindgen` feature in the `Cargo.toml` file. This will regenerate the
-bindings.
+Note: If you wish to use this library without regenerating the bindingings every build,
+please modify your cargo.toml to disable default features.
 
-## Planned Features
+```toml
+[Dependencies]
+libktx-sys = { version = "*", default-features = false}
+```
+
+## Downstream Features
 
 - Seperate vulkan and opengl bindings through features
 - Stop compiling unused libktx components
