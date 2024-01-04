@@ -19,6 +19,8 @@ fn main() {
     let build_type = "Debug";
     #[cfg(not(debug_assertions))]
     let build_type = "Release";
+    
+    configure_cargo();
 
     // Build dependencies
     let out = build_ktx(SOURCE_DIR, build_type);
